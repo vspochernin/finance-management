@@ -150,6 +150,31 @@
 	\caption{Схема БД}
 \end{figure}
 
+\begin{itemize}
+	\item Таблица \texttt{users} содержит информацию о пользователях.
+	\begin{itemize}
+		\item \texttt{id} выступает ключом записи.
+		\item \texttt{login} - логин, присутствует требование уникальности.
+		\item \texttt{password} - пароль, будет храниться в зашифрованном виде.
+	\end{itemize}
+	\item Таблица \texttt{categories} содержит информацию о категориях пользователей.
+	\begin{itemize}
+		\item \texttt{id} выступает ключом записи.
+		\item \texttt{user\_id} - ссылка на таблицу \texttt{users}, у каждого пользователя свои категории.
+		\item \texttt{title} - название категории.
+		\item \texttt{type} - тип категории, возможные значения \texttt{INCOME} (доход) или \texttt{EXPENSE} (расходы).
+		\item \texttt{budget} - бюджет на категорию в копейках, может отсутствовать.
+		\item Присутствует требование уникальности по паре (\texttt{user\_id}, \texttt{title}).
+	\end{itemize}
+	\item Таблица \texttt{transactions} содержит информацию о конкретных транзакциях (доходах, расходах).
+	\begin{itemize}
+		\item \texttt{id} выступает ключом записи.
+		\item \texttt{category\_id} - ссылка на таблицу \texttt{categories}. Каждая транзакция связана с какой-либо категорией.
+		\item \texttt{amount} - сумма транзакции в копейках.
+		\item \texttt{datetime} - метка времени совершения транзакции (по умолчанию выставляется \texttt{current\_timestamp}).
+	\end{itemize}
+\end{itemize}
+
 \newpage
 \section{Инструкции по запуску кода}
 
@@ -174,9 +199,9 @@
 Чтобы запустить сам проект, можно либо сделать это в консоли с помощью \texttt{Maven}, написав команду
 \begin{verbatim}
 mvn exec:java -Dexec.mainClass=
-"ru.vspochernin.short_link_service.ShortLinkServiceApplication"
+"ru.vspochernin.finance_management.FinanceManagementApplication"
 \end{verbatim}
-Либо просто запустить \texttt{main()} метод из класса \texttt{ShortLinkServiceApplication} с помощью \texttt{IntelliJ IDEA} (идея при запуске проекта должна автоматически скачать все зависимости).
+Либо просто запустить \texttt{main()} метод из класса \texttt{FinanceManagementApplication} с помощью \texttt{IntelliJ IDEA} (идея при запуске проекта должна автоматически скачать все зависимости).
 
 
 После запуска кода, мы увидим приветственное сообщение с описанием всех команд, требованиям к конфигурационному файлу и параметрам.
