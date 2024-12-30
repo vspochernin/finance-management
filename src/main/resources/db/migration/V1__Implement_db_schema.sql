@@ -12,7 +12,7 @@ CREATE TABLE categories
     title    VARCHAR(255) NOT NULL,
     type    VARCHAR(50) CHECK (type IN ('INCOME', 'EXPENSE')),
     budget  BIGINT DEFAULT NULL,
-    UNIQUE (user_id, name),
+    UNIQUE (user_id, title),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
