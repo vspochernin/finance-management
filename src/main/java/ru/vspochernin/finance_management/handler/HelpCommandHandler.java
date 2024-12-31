@@ -17,7 +17,7 @@ public class HelpCommandHandler implements CommandHandler {
 
     @Override
     public void validate(List<String> arguments) {
-        ValidationUtils.validateEmptyArguments(arguments);
+        ValidationUtils.validateArgumentsCount(arguments, getHandlingCommandType());
     }
 
     @Override

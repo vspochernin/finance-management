@@ -5,24 +5,37 @@ import ru.vspochernin.finance_management.command.CommandType;
 public class PrintUtils {
 
     public static void printHelpMessage() {
-        StringBuilder sb = new StringBuilder()
+        StringBuilder helpMessage = new StringBuilder()
                 .append("----------\n")
-                .append("Система управления личными финансами поддерживает следующие команды:\n")
-                .append("-----\n");
+                .append("Система управления личными финансами поддерживает следующие команды:\n");
+        helpMessage.append("-----\n");
+
         for (var commandType : CommandType.values()) {
             if (commandType == CommandType.UNKNOWN) {
                 continue;
             }
-            sb
+
+            helpMessage
                     .append("'")
-                    .append(commandType.getCommandTypeStr())
+                    .append(commandType.getCommandTypeStr());
+
+            commandType.getArgumentsDescription().forEach(argument -> helpMessage
+                    .append(" [")
+                    .append(argument)
+                    .append("]"));
+
+            helpMessage
                     .append("' - ")
-                    .append(commandType.getDescription())
-                    .append("\n");
+                    .append(commandType.getCommandDescription())
+                    .append(",\n");
         }
-        sb
-                .append("-----\n")
-                .append("----------");
-        System.out.println(sb);
+        helpMessage.append("-----\n");
+
+        helpMessage.append("- Логин должен содержать от 3 до 32 символов");
+        helpMessage.append("- Пароль должен содержать от 6 до 32 символов");
+
+        helpMessage.append("----------");
+
+        System.out.println(helpMessage);
     }
 }
