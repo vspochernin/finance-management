@@ -17,6 +17,7 @@ public enum CommandType {
     UNKNOWN("", List.of(), ""),
     HELP("help", List.of(), "вывод сообщения помощи"),
     EXIT("exit", List.of(), "выход из программы"),
+    REGISTER("register", List.of("логин", "пароль"), "зарегистрироваться")
     ;
 
     private static final Map<String, CommandType> BY_COMMAND_TYPE_STR_MAP = Arrays.stream(values())

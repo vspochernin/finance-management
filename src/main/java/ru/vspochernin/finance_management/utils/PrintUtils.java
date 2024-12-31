@@ -31,8 +31,8 @@ public class PrintUtils {
         }
         helpMessage.append("-----\n");
 
-        helpMessage.append("- Логин должен содержать от 3 до 32 символов");
-        helpMessage.append("- Пароль должен содержать от 6 до 32 символов");
+        helpMessage.append("- Логин должен содержать от 3 до 32 символов\n");
+        helpMessage.append("- Пароль должен содержать от 6 до 32 символов\n");
 
         helpMessage.append("----------");
 
