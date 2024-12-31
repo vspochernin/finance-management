@@ -43,4 +43,11 @@ public class ValidationUtils {
             throw new FinanceManagementException("Название категории не должно превышать 50 символов");
         }
     }
+
+    public static void validateMoneyLength(String money) {
+        int len = money.length();
+        if (len > 15) {
+            throw new FinanceManagementException("Денежное значение не может превышать 15 символов");
+        }
+    }
 }

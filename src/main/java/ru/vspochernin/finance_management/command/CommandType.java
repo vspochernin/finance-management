@@ -16,10 +16,11 @@ public enum CommandType {
 
     UNKNOWN("", List.of(), ""),
     HELP("help", List.of(), "вывод сообщения помощи"),
-    EXIT("exit", List.of(), "выход из программы"),
     REGISTER("register", List.of("логин", "пароль"), "зарегистрироваться"),
-    CATEGORY("category", List.of("тип категории", "название категории"), "создать категорию"),
     LOGIN("login", List.of("логин", "пароль"), "пройти аутентификацию"),
+    CATEGORY("category", List.of("тип категории", "название категории"), "создать категорию"),
+    BUDGET("budget", List.of("название категории расходов", "денежное значение"), "установить бюджет на категорию"),
+    EXIT("exit", List.of(), "выход из программы"),
     ;
 
     private static final Map<String, CommandType> BY_COMMAND_TYPE_STR_MAP = Arrays.stream(values())
