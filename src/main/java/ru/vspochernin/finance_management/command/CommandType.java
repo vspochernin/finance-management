@@ -18,6 +18,7 @@ public enum CommandType {
     HELP("help", List.of(), "вывод сообщения помощи"),
     EXIT("exit", List.of(), "выход из программы"),
     REGISTER("register", List.of("логин", "пароль"), "зарегистрироваться"),
+    CATEGORY("category", List.of("тип категории", "название категории"), "создать категорию"),
     LOGIN("login", List.of("логин", "пароль"), "пройти аутентификацию"),
     ;
 
