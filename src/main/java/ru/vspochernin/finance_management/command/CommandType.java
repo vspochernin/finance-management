@@ -13,13 +13,16 @@ import lombok.Getter;
 @Getter
 public enum CommandType {
 
-    UNKNOWN(""),
+    UNKNOWN("", ""),
+    HELP("help", "вывод сообщения помощи"),
+    EXIT("exit", "выход из программы")
     ;
 
     private static final Map<String, CommandType> BY_COMMAND_TYPE_STR_MAP = Arrays.stream(values())
             .collect(Collectors.toMap(CommandType::getCommandTypeStr, Function.identity()));
 
     private final String commandTypeStr;
+    private final String description;
 
     public static CommandType parse(String commandTypeStr) {
         return Optional.ofNullable(BY_COMMAND_TYPE_STR_MAP.get(commandTypeStr))
