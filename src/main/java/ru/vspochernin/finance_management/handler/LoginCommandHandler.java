@@ -32,7 +32,7 @@ public class LoginCommandHandler implements CommandHandler {
             throw new FinanceManagementException("Неправильный логин или пароль");
         }
 
-        FinanceManagementContext.currentUser = Optional.of(user);
+        FinanceManagementContext.currentUserLogin = Optional.of(user.getLogin());
         System.out.println("Аутентификация прошла успешно");
     }
 

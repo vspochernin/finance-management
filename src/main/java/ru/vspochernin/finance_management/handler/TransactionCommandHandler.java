@@ -13,6 +13,8 @@ import ru.vspochernin.finance_management.entity.User;
 import ru.vspochernin.finance_management.exception.FinanceManagementException;
 import ru.vspochernin.finance_management.repository.CategoryRepository;
 import ru.vspochernin.finance_management.repository.TransactionRepository;
+import ru.vspochernin.finance_management.repository.UserRepository;
+import ru.vspochernin.finance_management.utils.MoneyUtils;
 import ru.vspochernin.finance_management.utils.ParsingUrils;
 import ru.vspochernin.finance_management.utils.ValidationUtils;
 
@@ -20,12 +22,13 @@ import ru.vspochernin.finance_management.utils.ValidationUtils;
 @RequiredArgsConstructor
 public class TransactionCommandHandler implements CommandHandler {
 
+    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final TransactionRepository transactionRepository;
 
     @Override
     public void handle(List<String> arguments) {
-        User user = FinanceManagementContext.currentUser.get();
+        User user = userRepository.findByLogin(FinanceManagementContext.currentUserLogin.get()).get();
         String title = ParsingUrils.parseCategoryTitle(arguments.get(0));
 
         Category category = categoryRepository.findByUserAndTitle(user, title)
@@ -34,7 +37,7 @@ public class TransactionCommandHandler implements CommandHandler {
 
         Transaction transaction = Transaction.builder()
                 .category(category)
-                .amount(ParsingUrils.parseMoney(arguments.get(1)))
+                .amount(MoneyUtils.parseMoney(arguments.get(1)))
                 .datetime(LocalDateTime.now())
                 .build();
 

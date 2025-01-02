@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,13 +36,12 @@ public class User {
     private String login;
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Category> categories;
 
     public static String getCurrentUserLogin() {
-        return FinanceManagementContext.currentUser
-                .map(User::getLogin)
+        return FinanceManagementContext.currentUserLogin
                 .orElse(LOGOUT_USER_LOGIN_STUB);
     }
 }

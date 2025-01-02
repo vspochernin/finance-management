@@ -32,7 +32,7 @@ public class ValidationUtils {
     }
 
     public static void validateAuthentication() {
-        if (FinanceManagementContext.currentUser.isEmpty()) {
+        if (FinanceManagementContext.currentUserLogin.isEmpty()) {
             throw new FinanceManagementException("Необходимо пройти аутентификацию");
         }
     }

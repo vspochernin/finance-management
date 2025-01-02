@@ -11,6 +11,8 @@ import ru.vspochernin.finance_management.entity.CategoryType;
 import ru.vspochernin.finance_management.entity.User;
 import ru.vspochernin.finance_management.exception.FinanceManagementException;
 import ru.vspochernin.finance_management.repository.CategoryRepository;
+import ru.vspochernin.finance_management.repository.UserRepository;
+import ru.vspochernin.finance_management.utils.MoneyUtils;
 import ru.vspochernin.finance_management.utils.ParsingUrils;
 import ru.vspochernin.finance_management.utils.ValidationUtils;
 
@@ -19,10 +21,11 @@ import ru.vspochernin.finance_management.utils.ValidationUtils;
 public class BudgetCommandHandler implements CommandHandler {
 
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void handle(List<String> arguments) {
-        User user = FinanceManagementContext.currentUser.get();
+        User user = userRepository.findByLogin(FinanceManagementContext.currentUserLogin.get()).get();
         String title = ParsingUrils.parseCategoryTitle(arguments.get(0));
 
         Category category = categoryRepository.findByUserAndTitle(user, title)
@@ -33,7 +36,7 @@ public class BudgetCommandHandler implements CommandHandler {
             throw new FinanceManagementException("Бюджет можно установить только на категорию расходов");
         }
 
-        category.setBudget(ParsingUrils.parseMoney(arguments.get(1)));
+        category.setBudget(MoneyUtils.parseMoney(arguments.get(1)));
 
         categoryRepository.save(category);
         System.out.println("Бюджет успешно установлен");
