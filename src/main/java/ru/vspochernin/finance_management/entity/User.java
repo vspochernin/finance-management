@@ -1,6 +1,9 @@
 package ru.vspochernin.finance_management.entity;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
@@ -17,6 +20,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.vspochernin.finance_management.context.FinanceManagementContext;
+import ru.vspochernin.finance_management.utils.MoneyUtils;
 
 @Entity
 @Data
@@ -43,5 +47,40 @@ public class User {
     public static String getCurrentUserLogin() {
         return FinanceManagementContext.currentUserLogin
                 .orElse(LOGOUT_USER_LOGIN_STUB);
+    }
+
+    public Map<String, Long> getIncomeByCategory() {
+        return categories.stream()
+                .filter(category -> category.getType() == CategoryType.INCOME)
+                .collect(Collectors.toMap(
+                        Category::getTitle,
+                        category -> category.getTransactions().stream()
+                                .mapToLong(Transaction::getAmount)
+                                .sum()));
+    }
+
+    public Map<String, ExpenseInfo> getExpenseInfoByCategory() {
+        return categories.stream()
+                .filter(category -> category.getType() == CategoryType.EXPENSE)
+                .collect(Collectors.toMap(
+                        Category::getTitle,
+                        category -> {
+                            long expense = category.getTransactions().stream()
+                                    .mapToLong(Transaction::getAmount)
+                                    .sum();
+                            Optional<Long> budget = category.getBudgetO();
+                            return new ExpenseInfo(expense, budget);
+                        }
+                ));
+    }
+
+    public void notifyAboutBudget() {
+        Map<String, ExpenseInfo> expenseInfoByCategory = getExpenseInfoByCategory();
+        expenseInfoByCategory.entrySet().stream()
+                .filter(entry -> entry.getValue().budget().isPresent())
+                .filter(entry -> entry.getValue().budget().get() < entry.getValue().expense())
+                .forEach(entry -> System.out.println("Внимание! Превышен бюджет по категории: " + entry.getKey()
+                        + " (" + MoneyUtils.convertToRubles(entry.getValue().expense()) + "/"
+                        + MoneyUtils.convertToRubles(entry.getValue().budget().get()) + ")"));
     }
 }

@@ -18,7 +18,7 @@ public class MoneyUtils {
 
     public static String convertToRubles(long amount) {
         long rubles = amount / 100;
-        long kopecks = amount % 100;
+        long kopecks = Math.abs(amount) % 100;
 
         return rubles + "." + (kopecks < 10 ? "0" + kopecks : kopecks);
     }

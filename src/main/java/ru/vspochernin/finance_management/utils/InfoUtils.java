@@ -1,43 +1,19 @@
 package ru.vspochernin.finance_management.utils;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import ru.vspochernin.finance_management.entity.Category;
-import ru.vspochernin.finance_management.entity.CategoryType;
-import ru.vspochernin.finance_management.entity.Transaction;
+import ru.vspochernin.finance_management.entity.ExpenseInfo;
 import ru.vspochernin.finance_management.entity.User;
 
 public class InfoUtils {
 
     public static void generateReport(User user) {
-        List<Category> categories = user.getCategories();
-
-        Map<String, Long> incomeByCategory = categories.stream()
-                .filter(category -> category.getType() == CategoryType.INCOME)
-                .collect(Collectors.toMap(
-                        Category::getTitle,
-                        category -> category.getTransactions().stream()
-                                .mapToLong(Transaction::getAmount)
-                                .sum()));
+        Map<String, Long> incomeByCategory = user.getIncomeByCategory();
         long totalIncome = incomeByCategory.values().stream()
                 .mapToLong(Long::longValue)
                 .sum();
 
-        Map<String, ExpenseInfo> expenseInfoByCategory = categories.stream()
-                .filter(category -> category.getType() == CategoryType.EXPENSE)
-                .collect(Collectors.toMap(
-                        Category::getTitle,
-                        category -> {
-                            long expense = category.getTransactions().stream()
-                                    .mapToLong(Transaction::getAmount)
-                                    .sum();
-                            Optional<Long> budget = category.getBudgetO();
-                            return new ExpenseInfo(expense, budget);
-                        }
-                ));
+        Map<String, ExpenseInfo> expenseInfoByCategory = user.getExpenseInfoByCategory();
         long totalExpense = expenseInfoByCategory.values().stream()
                 .mapToLong(ExpenseInfo::expense)
                 .sum();
@@ -58,19 +34,13 @@ public class InfoUtils {
                 .forEach(entry -> {
                     String category = entry.getKey();
                     ExpenseInfo expenseInfo = entry.getValue();
-                    long budget = expenseInfo.budget.get();
-                    long expense = expenseInfo.expense;
+                    long budget = expenseInfo.budget().get();
+                    long expense = expenseInfo.expense();
                     System.out.println("  - "
                             + category
                             + ": "
                             + MoneyUtils.convertToRubles(budget)
                             + ", оставшийся бюджет: " + MoneyUtils.convertToRubles(budget - expense));
                 });
-    }
-
-    private record ExpenseInfo(
-            long expense,
-            Optional<Long> budget)
-    {
     }
 }
