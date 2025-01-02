@@ -83,4 +83,19 @@ public class User {
                         + " (" + MoneyUtils.convertToRubles(entry.getValue().expense()) + "/"
                         + MoneyUtils.convertToRubles(entry.getValue().budget().get()) + ")"));
     }
+
+    public void notifyAboutExpense() {
+        long totalIncome = getIncomeByCategory().values().stream()
+                .mapToLong(Long::longValue)
+                .sum();
+        long totalExpense = getExpenseInfoByCategory().values().stream()
+                .mapToLong(ExpenseInfo::expense)
+                .sum();
+
+        if (totalExpense > totalIncome) {
+            System.out.println("Внимание! Расходы превысили доходы: "
+                    + " (" + MoneyUtils.convertToRubles(totalExpense) + "/"
+                    + MoneyUtils.convertToRubles(totalIncome) + ")");
+        }
+    }
 }

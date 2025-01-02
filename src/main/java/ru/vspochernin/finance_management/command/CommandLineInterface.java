@@ -41,6 +41,7 @@ public class CommandLineInterface {
         while (FinanceManagementContext.isRunning) {
             Optional<User> currentUser = FinanceManagementContext.currentUserLogin.flatMap(userRepository::findByLogin);
             currentUser.ifPresent(User::notifyAboutBudget);
+            currentUser.ifPresent(User::notifyAboutExpense);
             currentCommand = Command.getNext();
             try {
                 Optional.ofNullable(commandHandlersMap.get(currentCommand.commandType()))
