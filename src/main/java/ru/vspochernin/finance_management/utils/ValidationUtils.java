@@ -50,4 +50,10 @@ public class ValidationUtils {
             throw new FinanceManagementException("Денежное значение не может превышать 15 символов");
         }
     }
+
+    public static void validateNotEmptyArguments(List<String> arguments) {
+        if (arguments.isEmpty()) {
+            throw new FinanceManagementException("Ожидается не пустой список аргументов");
+        }
+    }
 }

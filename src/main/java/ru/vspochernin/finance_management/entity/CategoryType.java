@@ -26,4 +26,8 @@ public enum CategoryType {
         return Optional.ofNullable(BY_CATEGORY_TYPE_STR_MAP.get(categoryTypeStr))
                 .orElseThrow(() -> new FinanceManagementException("Некорректный тип категории: " + categoryTypeStr));
     }
+
+    public String toRusType() {
+        return this.equals(INCOME) ? "доход" : "расход";
+    }
 }
