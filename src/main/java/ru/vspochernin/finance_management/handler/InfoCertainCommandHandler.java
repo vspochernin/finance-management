@@ -38,12 +38,17 @@ public class InfoCertainCommandHandler implements CommandHandler {
             Optional<Category> categoryO = Optional.ofNullable(categoryTitleToCategoryMap.get(title));
 
             if (categoryO.isEmpty()) {
-                System.out.println("- Категории: " + title + " не найдено");
+                System.out.println("- Категории " + title + " не найдено");
                 return;
             }
             Category category = categoryO.get();
 
-            System.out.println("- Категория: " + title + ", тип: " + category.getType().toRusType());
+            long totalAmount = category.getTransactions().stream()
+                    .mapToLong(Transaction::getAmount)
+                    .sum();
+
+            System.out.println("- Категория: " + title + ", тип: " + category.getType().toRusType()
+                    + ", общая сумма: " + MoneyUtils.convertToRubles(totalAmount));
             category.getTransactions().stream()
                     .sorted(Comparator.comparing(Transaction::getDatetime))
                     .forEach(it -> System.out.println(

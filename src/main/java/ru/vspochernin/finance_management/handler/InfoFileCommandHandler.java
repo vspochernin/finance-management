@@ -36,6 +36,8 @@ public class InfoFileCommandHandler implements CommandHandler {
         } catch (IOException e) {
             throw new FinanceManagementException("Невозможно записать информацию в данный файл");
         }
+
+        System.out.println("Информация успешно записана в файл");
     }
 
     @Override
