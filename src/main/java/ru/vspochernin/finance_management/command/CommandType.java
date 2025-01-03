@@ -24,7 +24,7 @@ public enum CommandType {
     INFO("info", List.of(), "получить подробную информацию по доходам/расходам/бюджетам"),
     INFO_FILE("info-file", List.of("абсолютный путь до несуществующего файла"), "вывести подробную информацию по доходам/расходам/бюджетам в файл"),
     INFO_CERTAIN("info-certain", List.of("...названия категорий..."), "вывести подробную информацию по конкретным категориям"),
-    EXIT("exit", List.of(), "выход из программы"),
+    EXIT("exit", List.of(), "выйти из программы"),
     ;
 
     private static final Map<String, CommandType> BY_COMMAND_TYPE_STR_MAP = Arrays.stream(values())
