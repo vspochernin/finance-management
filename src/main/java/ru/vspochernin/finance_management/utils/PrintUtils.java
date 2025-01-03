@@ -14,8 +14,7 @@ public class PrintUtils {
                 continue;
             }
 
-            helpMessage
-                    .append("'")
+            helpMessage.append("'")
                     .append(commandType.getCommandTypeStr());
 
             commandType.getArgumentsDescription().forEach(argument -> helpMessage
@@ -23,8 +22,7 @@ public class PrintUtils {
                     .append(argument)
                     .append("]"));
 
-            helpMessage
-                    .append("' - ")
+            helpMessage.append("' - ")
                     .append(commandType.getCommandDescription())
                     .append(",\n");
         }

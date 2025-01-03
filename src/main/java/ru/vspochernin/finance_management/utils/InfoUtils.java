@@ -7,7 +7,7 @@ import ru.vspochernin.finance_management.entity.User;
 
 public class InfoUtils {
 
-    public static void generateReport(User user) {
+    public static String generateReport(User user) {
         Map<String, Long> incomeByCategory = user.getIncomeByCategory();
         long totalIncome = incomeByCategory.values().stream()
                 .mapToLong(Long::longValue)
@@ -18,17 +18,31 @@ public class InfoUtils {
                 .mapToLong(ExpenseInfo::expense)
                 .sum();
 
-        System.out.println("Общий доход: " + MoneyUtils.convertToRubles(totalIncome));
-        System.out.println("Доходы по категориям:");
+        StringBuilder result = new StringBuilder();
+
+        result.append("Общий доход: ")
+                .append(MoneyUtils.convertToRubles(totalIncome))
+                .append("\n");
+        result.append("Доходы по категориям:\n");
         incomeByCategory.forEach((category, amount) ->
-                System.out.println("  - " + category + ": " + MoneyUtils.convertToRubles(amount)));
+                result.append("  - ")
+                        .append(category)
+                        .append(": ")
+                        .append(MoneyUtils.convertToRubles(amount))
+                        .append("\n"));
 
-        System.out.println("Общие расходы: " + MoneyUtils.convertToRubles(totalExpense));
-        System.out.println("Расходы по категориям:");
+        result.append("Общие расходы: ")
+                .append(MoneyUtils.convertToRubles(totalExpense))
+                .append("\n");
+        result.append("Расходы по категориям:\n");
         expenseInfoByCategory.forEach(((category, expenseInfo) ->
-                System.out.println("  - " + category + ": " + MoneyUtils.convertToRubles(expenseInfo.expense()))));
+                result.append("  - ")
+                        .append(category)
+                        .append(": ")
+                        .append(MoneyUtils.convertToRubles(expenseInfo.expense()))
+                        .append("\n")));
 
-        System.out.println("Бюджет по категориям:");
+        result.append("Бюджет по категориям:\n");
         expenseInfoByCategory.entrySet().stream()
                 .filter(entry -> entry.getValue().budget().isPresent())
                 .forEach(entry -> {
@@ -36,11 +50,15 @@ public class InfoUtils {
                     ExpenseInfo expenseInfo = entry.getValue();
                     long budget = expenseInfo.budget().get();
                     long expense = expenseInfo.expense();
-                    System.out.println("  - "
-                            + category
-                            + ": "
-                            + MoneyUtils.convertToRubles(budget)
-                            + ", оставшийся бюджет: " + MoneyUtils.convertToRubles(budget - expense));
+                    result.append("  - ")
+                            .append(category)
+                            .append(": ")
+                            .append(MoneyUtils.convertToRubles(budget))
+                            .append(", оставшийся бюджет: ")
+                            .append(MoneyUtils.convertToRubles(budget - expense))
+                            .append("\n");
                 });
+
+        return result.toString();
     }
 }
